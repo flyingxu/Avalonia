@@ -80,7 +80,7 @@ namespace Perspex.Markup.Data.Plugins
             }
 
             /// <inheritdoc/>
-            public bool IsValid => !Errors.OfType<object>().Any();
+            public bool IsValid => !Errors?.OfType<object>().Any() ?? true;
 
             /// <summary>
             /// The errors on the given property and on the object as a whole.
