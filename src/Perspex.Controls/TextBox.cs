@@ -240,6 +240,7 @@ namespace Perspex.Controls
             if (property == TextProperty)
             {
                 UpdateValidationState(status);
+                ((IPseudoClasses)Classes).Set(":invalid", !status.IsValid);
             }
         }
 
