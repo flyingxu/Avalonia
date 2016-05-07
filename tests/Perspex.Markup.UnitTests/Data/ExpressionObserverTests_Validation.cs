@@ -21,7 +21,7 @@ namespace Perspex.Markup.UnitTests.Data
         public void Exception_Validation_Sends_ValidationUpdate()
         {
             var data = new ExceptionTest { MustBePositive = 5 };
-            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), ValidationMethods.Exceptions);
+            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), false);
             var validationMessageFound = false;
             observer.Where(o => o is IValidationStatus).Subscribe(_ => validationMessageFound = true);
             observer.SetValue(-5);
@@ -29,21 +29,10 @@ namespace Perspex.Markup.UnitTests.Data
         }
 
         [Fact]
-        public void Disabled_Exception_Validation_Does_Not_Send_ValidationUpdate()
-        {
-            var data = new ExceptionTest { MustBePositive = 5 };
-            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), ValidationMethods.None);
-            var validationMessageFound = false;
-            observer.Where(o => o is IValidationStatus).Subscribe(_ => validationMessageFound = true);
-            Assert.Throws<TargetInvocationException>(() => observer.SetValue(-5));
-            Assert.False(validationMessageFound);
-        }
-
-        [Fact]
         public void Disabled_Indei_Validation_Does_Not_Subscribe()
         {
             var data = new IndeiTest { MustBePositive = 5 };
-            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), ValidationMethods.None);
+            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), false);
 
             observer.Subscribe(_ => { });
 
@@ -54,7 +43,7 @@ namespace Perspex.Markup.UnitTests.Data
         public void Enabled_Indei_Validation_Subscribes()
         {
             var data = new IndeiTest { MustBePositive = 5 };
-            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), ValidationMethods.INotifyDataErrorInfo);
+            var observer = new ExpressionObserver(data, nameof(data.MustBePositive), true);
             var sub = observer.Subscribe(_ => { });
 
             Assert.Equal(1, data.SubscriptionCount);

@@ -78,9 +78,9 @@ namespace Perspex.Markup.Xaml.Data
         public object Source { get; set; }
 
         /// <summary>
-        /// Gets or sets the validation methods for the binding to use.
+        /// Gets or sets a value indicating whether the property should be validated.
         /// </summary>
-        public ValidationMethods ValidationMethods { get; set; }
+        public bool EnableValidation { get; set; }
 
         /// <inheritdoc/>
         public InstancedBinding Initiate(
@@ -207,7 +207,8 @@ namespace Perspex.Markup.Xaml.Data
                 var result = new ExpressionObserver(
                     () => target.GetValue(Control.DataContextProperty),
                     path,
-                    update, ValidationMethods);
+                    update,
+                    EnableValidation);
 
                 return result;
             }
@@ -218,7 +219,8 @@ namespace Perspex.Markup.Xaml.Data
                           .OfType<IPerspexObject>()
                           .Select(x => x.GetObservable(Control.DataContextProperty))
                           .Switch(),
-                    path, ValidationMethods);
+                    path,
+                    EnableValidation);
             }
         }
 
@@ -228,7 +230,8 @@ namespace Perspex.Markup.Xaml.Data
 
             var result = new ExpressionObserver(
                 ControlLocator.Track(target, elementName),
-                path, ValidationMethods);
+                path,
+                EnableValidation);
             return result;
         }
 
@@ -236,7 +239,7 @@ namespace Perspex.Markup.Xaml.Data
         {
             Contract.Requires<ArgumentNullException>(source != null);
 
-            return new ExpressionObserver(source, path, ValidationMethods);
+            return new ExpressionObserver(source, path, EnableValidation);
         }
 
         private ExpressionObserver CreateTemplatedParentObserver(

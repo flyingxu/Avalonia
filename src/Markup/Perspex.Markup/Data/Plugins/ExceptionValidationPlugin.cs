@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright (c) The Perspex Project. All rights reserved.
+// Licensed under the MIT license. See licence.md file in the project root for full license information.
+
 using Perspex.Data;
+using System;
 using System.Reflection;
 
 namespace Perspex.Markup.Data.Plugins
@@ -13,10 +12,10 @@ namespace Perspex.Markup.Data.Plugins
     /// </summary>
     public class ExceptionValidationPlugin : IValidationPlugin
     {
+        public static ExceptionValidationPlugin Instance { get; } = new ExceptionValidationPlugin();
 
         /// <inheritdoc/>
         public bool Match(WeakReference reference) => true;
-
 
         /// <inheritdoc/>
         public IPropertyAccessor Start(WeakReference reference, string name, IPropertyAccessor accessor, Action<IValidationStatus> callback)
@@ -54,7 +53,7 @@ namespace Perspex.Markup.Data.Plugins
         /// <summary>
         /// Describes the current validation status after setting a property value.
         /// </summary>
-        public class ExceptionValidationStatus : IFilterableValidationStatus
+        public class ExceptionValidationStatus : IValidationStatus
         {
             internal ExceptionValidationStatus(Exception exception)
             {
@@ -65,15 +64,9 @@ namespace Perspex.Markup.Data.Plugins
             /// The thrown exception. If there was no thrown exception, null.
             /// </summary>
             public Exception Exception { get; }
-
-
+            
             /// <inheritdoc/>
             public bool IsValid => Exception == null;
-
-            public bool Match(ValidationMethods enabledMethods)
-            {
-                return (enabledMethods & ValidationMethods.Exceptions) != 0;
-            }
         }
     }
 }

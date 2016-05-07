@@ -1,14 +1,10 @@
-﻿using Perspex.Controls;
+﻿// Copyright (c) The Perspex Project. All rights reserved.
+// Licensed under the MIT license. See licence.md file in the project root for full license information.
+
+using Perspex.Controls;
 using Perspex.Data;
-using Perspex.Markup.Data;
 using Perspex.Markup.Xaml.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Perspex.Markup.Xaml.UnitTests.Data
@@ -16,7 +12,7 @@ namespace Perspex.Markup.Xaml.UnitTests.Data
     public class BindingTests_Validation
     {
         [Fact]
-        public void Disabled_Validation_Should_Not_Trigger_Validation_Change()
+        public void Disabled_Validation_Should_Trigger_Validation_Change_On_Exception()
         {
             var source = new ValidationTestModel { MustBePositive = 5 };
             var target = new TestControl { DataContext = source };
@@ -24,17 +20,20 @@ namespace Perspex.Markup.Xaml.UnitTests.Data
             {
                 Path = nameof(source.MustBePositive),
                 Mode = BindingMode.TwoWay,
-                ValidationMethods = ValidationMethods.None
+
+                // Even though EnableValidation = false, exception validation is enabled.
+                EnableValidation = false,
             };
+
             target.Bind(TestControl.ValidationTestProperty, binding);
             
             target.ValidationTest = -5;
 
-            Assert.True(target.ValidationStatus.IsValid);
+            Assert.False(target.ValidationStatus.IsValid);
         }
 
         [Fact]
-        public void Enabled_Validation_Should_Trigger_Validation_Change()
+        public void Enabled_Validation_Should_Trigger_Validation_Change_On_Exception()
         {
             var source = new ValidationTestModel { MustBePositive = 5 };
             var target = new TestControl { DataContext = source };
@@ -42,8 +41,9 @@ namespace Perspex.Markup.Xaml.UnitTests.Data
             {
                 Path = nameof(source.MustBePositive),
                 Mode = BindingMode.TwoWay,
-                ValidationMethods = ValidationMethods.All
+                EnableValidation = true,
             };
+
             target.Bind(TestControl.ValidationTestProperty, binding);
 
             target.ValidationTest = -5;
@@ -60,8 +60,9 @@ namespace Perspex.Markup.Xaml.UnitTests.Data
             {
                 Path = nameof(model.MustBePositive),
                 Mode = BindingMode.TwoWay,
-                ValidationMethods = ValidationMethods.All
+                EnableValidation = true,
             };
+
             control.Bind(TestControl.ValidationTestProperty, binding);
             control.DataContext = model;
             Assert.DoesNotContain(control.Classes, x => x == ":invalid");
@@ -76,8 +77,9 @@ namespace Perspex.Markup.Xaml.UnitTests.Data
             {
                 Path = nameof(model.MustBePositive),
                 Mode = BindingMode.TwoWay,
-                ValidationMethods = ValidationMethods.All
+                EnableValidation = true,
             };
+
             control.Bind(TestControl.ValidationTestProperty, binding);
             control.DataContext = model;
             control.ValidationTest = -5;
@@ -94,8 +96,9 @@ namespace Perspex.Markup.Xaml.UnitTests.Data
             {
                 Path = nameof(model.MustBePositive),
                 Mode = BindingMode.TwoWay,
-                ValidationMethods = ValidationMethods.All
+                EnableValidation = true,
             };
+
             control.Bind(TestControl.ValidationTestProperty, binding);
             control.DataContext = model;
             

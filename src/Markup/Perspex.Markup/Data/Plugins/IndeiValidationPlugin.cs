@@ -72,7 +72,7 @@ namespace Perspex.Markup.Data.Plugins
         /// <summary>
         /// Describes the current validation status of a property as reported by an object that implements <see cref="INotifyDataErrorInfo"/>.
         /// </summary>
-        public class IndeiValidationStatus : IFilterableValidationStatus
+        public class IndeiValidationStatus : IValidationStatus
         {
             internal IndeiValidationStatus(IEnumerable errors)
             {
@@ -86,11 +86,6 @@ namespace Perspex.Markup.Data.Plugins
             /// The errors on the given property and on the object as a whole.
             /// </summary>
             public IEnumerable Errors { get; }
-
-            public bool Match(ValidationMethods enabledMethods)
-            {
-                return (enabledMethods & ValidationMethods.INotifyDataErrorInfo) != 0;
-            }
         }
     }
 }

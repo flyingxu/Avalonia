@@ -23,7 +23,7 @@ namespace Perspex.Controls.UnitTests
                 var target = new TextBox();
                 var binding = new Binding(nameof(ExceptionTest.LessThan10));
                 binding.Source = new ExceptionTest();
-                binding.ValidationMethods = ValidationMethods.Exceptions;
+                binding.EnableValidation = true;
                 target.Bind(TextBox.TextProperty, binding);
 
                 Assert.True(target.ValidationStatus.IsValid);
@@ -42,7 +42,7 @@ namespace Perspex.Controls.UnitTests
                 var target = new TextBox();
                 var binding = new Binding(nameof(ExceptionTest.LessThan10));
                 binding.Source = new ExceptionTest();
-                binding.ValidationMethods = ValidationMethods.Exceptions;
+                binding.EnableValidation = true;
                 target.Bind(TextBox.TextProperty, binding);
 
                 Assert.True(target.ValidationStatus.IsValid);
@@ -61,7 +61,7 @@ namespace Perspex.Controls.UnitTests
                 var target = new TextBox();
                 var binding = new Binding(nameof(ExceptionTest.LessThan10));
                 binding.Source = new IndeiTest();
-                binding.ValidationMethods = ValidationMethods.INotifyDataErrorInfo;
+                binding.EnableValidation = true;
                 target.Bind(TextBox.TextProperty, binding);
 
                 Assert.True(target.ValidationStatus.IsValid);
